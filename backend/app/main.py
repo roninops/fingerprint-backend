@@ -1,5 +1,3 @@
-# importere bibliotekker
-
 from fastapi import FastAPI  # fastapi er en bibliotek, Fastapi er en klasse, En klasse er en skabelon til et objekt "tænk jeg vil bruge FastAPIs opskrift"
 from fastapi import Request
 from fastapi.responses import HTMLResponse
