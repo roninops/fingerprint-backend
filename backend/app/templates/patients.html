@@ -4,27 +4,29 @@
     <title>Patients</title>
 </head>
 <body>
-    h2>Opret ny patient</h2>
 
-<form method="post" action="/patients">
-    <label>
-        Navn:
-        <input type="text" name="name" required>
-    </label>
-    <br><br>
+    <h2>Opret ny patient</h2>
 
-    <label>
-        Alder:
-        <input type="number" name="age" required>
-    </label>
-    <br><br>
+    <form method="post" action="/patients">
+        <label>
+            Navn:
+            <input type="text" name="name" required>
+        </label>
+        <br><br>
 
-    <button type="submit">Opret patient</button>
-</form>
+        <button type="submit">Opret patient</button>
+    </form>
 
-<hr>
+    <hr>
+
     <h1>Patient oversigt</h1>
 
-    <p>Dette er din første rendede HTML-side 🎉</p>
+    <ul>
+        {% for patient in patients %}
+            <li>{{ patient.name }}</li>
+        {% endfor %}
+    </ul>
+
+
 </body>
 </html>
