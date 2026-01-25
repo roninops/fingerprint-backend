@@ -11,5 +11,6 @@ class Patient(FingerprintBase):
     id = Column(Integer, primary_key=True)
     external_id = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
     name = Column(String(100), nullable=False)
+    photo_path = Column(String(255), nullable=True)  # Path til billede fra Raspberry Pi
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())

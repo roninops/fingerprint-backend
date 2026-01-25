@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journal - {{ patient.name }}</title>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .patient-info {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .patient-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .back-btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(255,255,255,0.4);
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 22px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .records-list {
+            margin-top: 20px;
+        }
+        .record-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .record-card .date {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .record-card .field {
+            margin-bottom: 10px;
+        }
+        .record-card .field strong {
+            color: #667eea;
+            display: inline-block;
+            width: 100px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/patients" class="back-btn">← Tilbage til patienter</a>
+            <h1>📋 Journal: {{ patient.name }}</h1>
+            <div class="patient-info">
+                <p><strong>Patient ID:</strong> {{ patient.id }}</p>
+                <p><strong>UUID:</strong> {{ patient.external_id }}</p>
+                <p><strong>✅ Fingerprint Enrolled</strong> - Kan logge ind med fingeraftryk</p>
+                {% if patient.photo_path %}
+                <p><strong>📷 Billede:</strong> Taget</p>
+                {% else %}
+                <p><strong>📷 Billede:</strong> Ikke taget endnu</p>
+                {% endif %}
+            </div>
+            
+            <!-- Action buttons -->
+            <div style="padding: 20px 30px; background: rgba(255,255,255,0.1); display: flex; gap: 15px;">
+                <button onclick="takePhoto()" class="btn" style="background: #28a745;">
+                    📷 Tag Billede
+                </button>
+                <button onclick="unlockDoor()" class="btn" style="background: #dc3545;">
+                    🔓 Lås Op
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Opret ny journal entry -->
+            <div class="section">
+                <h2>➕ Tilføj Journal Entry</h2>
+                <form method="post" action="/patient/{{ patient.id }}/journal">
+                    <div class="form-group">
+                        <label>Alder:</label>
+                        <input type="number" name="age" required min="0" max="150">
+                    </div>
+                    <div class="form-group">
+                        <label>Diagnose:</label>
+                        <textarea name="diagnosis" required placeholder="Beskriv diagnose..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Medicin:</label>
+                        <textarea name="medication" placeholder="Medicinsk behandling... (valgfrit)"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Gem Journal Entry</button>
+                </form>
+            </div>
+
+            <!-- Vis journal entries -->
+            <div class="section">
+                <h2>📚 Journal Historie</h2>
+                
+                {% if records %}
+                    <div class="records-list">
+                        {% for record in records %}
+                        <div class="record-card">
+                            <div class="date">📅 {{ record.created_at.strftime('%d-%m-%Y %H:%M') if record.created_at else 'Ikke angivet' }}</div>
+                            <div class="field">
+                                <strong>Alder:</strong> {{ record.age }} år
+                            </div>
+                            <div class="field">
+                                <strong>Diagnose:</strong> {{ record.diagnosis }}
+                            </div>
+                            <div class="field">
+                                <strong>Medicin:</strong> {{ record.medication or 'Ingen' }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        </svg>
+                        <p>Ingen journal entries endnu.</p>
+                        <p>Opret den første ovenfor!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function takePhoto() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Tager billede...';
+            
+            try {
+                const response = await fetch('/patient/{{ patient.id }}/take-photo', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✅ Billede taget!');
+                    location.reload();
+                } else {
+                    alert('❌ Fejl: ' + data.error);
+                    btn.disabled = false;
+                    btn.textContent = '📷 Tag Billede';
+                }
+            } catch (error) {
+                alert('❌ Fejl: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = '📷 Tag Billede';
+            }
+        }
+        
+        async function unlockDoor() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Åbner lås...';
+            
+            try {
+                const response = await fetch('/patient/{{ patient.id }}/unlock?duration=2', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✅ Lås åbnet i 2 sekunder!');
+                } else {
+                    alert('❌ Fejl: ' + data.error);
+                }
+                
+                btn.disabled = false;
+                btn.textContent = '🔓 Lås Op';
+            } catch (error) {
+                alert('❌ Fejl: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = '🔓 Lås Op';
+            }
+        }
+    </script>
+</body>
+</html>

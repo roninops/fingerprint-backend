@@ -1,14 +1,26 @@
-# Python virtual environment
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 venv/
+env/
+ENV/
+
+# Database
+*.db
+*.db-journal
+
+# Environment
 .env
 
-# Python cache
-__pycache__/
-*.pyc
-
-# Editor / OS
+# IDE
 .vscode/
-.DS_Store
+.idea/
+*.swp
+*.swo
 
-# Logs
-*.log
+# OS
+.DS_Store
+Thumbs.db

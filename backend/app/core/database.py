@@ -22,7 +22,7 @@ FingerprintSessionLocal = sessionmaker(
 )
 
 
-class FingerprintBase(DeclarativeBase):
+class FingerprintBase(DeclarativeBase): # En Base samler alle metadata for models. # fortæller sqlAl and disse tabler høre sammen # bruger aembic til migrationer
     pass
 
 
