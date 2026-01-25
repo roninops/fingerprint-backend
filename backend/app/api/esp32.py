@@ -66,7 +66,6 @@ def enroll_fingerprint(request: EnrollRequest, db: Session = Depends(get_db)):
         db.commit()
         return {"success": True, "message": f"Fingerprint moved to {patient.name}"}
     
-    # Opret nyt fingerprint
     fingerprint = Fingerprint(
         patient_id=request.patient_id,
         sensor_slot=request.slot,
@@ -130,10 +129,7 @@ def scan_fingerprint(request: ScanRequest, db: Session = Depends(get_db)):
 
 @router.post("/scan-new")
 def scan_for_new_fingerprint(db: Session = Depends(get_db)):
-    """
-    Scanner alle slots og find det første fingeraftryk der IKKE er i databasen
-    Bruges til at finde nye ukendte fingeraftryk
-    """
+ 
     # Hent alle kendte slots fra database
     known_slots = db.query(Fingerprint.sensor_slot).distinct().all()
     known_slot_numbers = [slot[0] for slot in known_slots]
