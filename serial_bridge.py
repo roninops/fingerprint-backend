@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Serial Bridge - Læser fra ESP32 via USB og sender til backend
-Kør dette script på din computer mens ESP32 er forbundet via USB
-"""
 
 import serial
 import requests
